@@ -98,7 +98,7 @@ def main():
         except IndexError:
             pass
         else:
-            print('At:', Addr(g.at))
+            print('At:', Addr(at))
         print('SP:', Addr(g.sp))
         elf = g.elf
         if opts.elf:
