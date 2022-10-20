@@ -12,6 +12,7 @@ import sys
 
 import elftools.elf as elflib
 import elftools.elf.elffile
+elftools.elf.elffile  # hi, pyflakes!
 
 0_0  # Python >= 3.6 is required
 
