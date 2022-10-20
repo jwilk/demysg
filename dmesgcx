@@ -124,6 +124,7 @@ def main():
         print('Source:', end=' ', flush=True)
         subprocess.run(['addr2line', '-e', elf, '-f', '-i', '-p', '-C', str(addr)])
         n += 1
+    sys.exit(n == 0)
 
 if __name__ == '__main__':
     main()
