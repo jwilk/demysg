@@ -7,7 +7,11 @@
 import argparse
 import enum
 import re
+import subprocess
 import sys
+
+import elftools.elf as elflib
+import elftools.elf.elffile
 
 def attr2func(f):
     class attr2func:
@@ -61,7 +65,8 @@ def fmt_err(err):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.parse_args()
+    ap.add_argument('-e', dest='elf', metavar='PATH', help='ELF file to look into')
+    opts = ap.parse_args()
     prog = ap.prog
     for line in sys.stdin:
         for regexp in regexps:
@@ -80,12 +85,29 @@ def main():
         else:
             print('At:', fmt_addr(g.at))
         print('SP:', fmt_addr(g.sp))
-        print('Path:', g.elf)
+        elf = g.elf
+        if opts.elf:
+            elf = opts.elf
+        print('Path:', elf)
         ip = int(g.ip, 16)
         vmstart = int(g.vmstart, 16)
         print('IP:', fmt_addr(ip), '=', f'VMA +', fmt_addr(ip - vmstart))
         print('VMA at:', fmt_addr(vmstart))
         print('VMA size:', fmt_addr(g.vmsize))
+        if opts.elf:
+            with open(opts.elf, 'rb') as fp:
+                elffile = elflib.elffile.ELFFile(fp)
+                xsegments = []
+                for segment in elffile.iter_segments('PT_LOAD'):
+                    if segment['p_flags'] & elflib.constants.P_FLAGS.PF_X:
+                        xsegments += [segment]
+            if len(xsegments) != 1:
+                raise RuntimeError(f'found {len(xsegments)} executable segments in {elf}')
+            [xsegment] = xsegments
+            elf_vaddr = xsegment['p_vaddr']
+        addr = ip - vmstart + elf_vaddr
+        print('Source:', end=' ', flush=True)
+        subprocess.run(['addr2line', '-e', elf, '-f', '-i', '-p', '-C', fmt_addr(addr)])
         print()
 
 if __name__ == '__main__':
