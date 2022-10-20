@@ -51,6 +51,7 @@ class Addr(int):
         return f'0x{self:012X}'
 
 class PFErrorCode(enum.IntFlag):
+
     # enum x86_pf_error_code in <arch/x86/include/asm/trap_pf.h>:
     X86_PF_PROT  = 1 << 0   # 0 = no page found; 1 = protection fault 
     X86_PF_WRITE = 1 << 1   # 0 = read access; 1 = write access 
