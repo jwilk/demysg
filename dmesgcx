@@ -106,7 +106,7 @@ def main():
         print('Path:', elf)
         ip = Addr(g.ip)
         vmstart = Addr(g.vmstart)
-        print('IP:', ip, '=', f'VMA +', ip - vmstart)
+        print('IP:', ip, '=', 'VMA +', ip - vmstart)
         print('VMA at:', vmstart)
         print('VMA size:', Addr(g.vmsize))
         if opts.elf:
