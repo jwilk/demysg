@@ -13,6 +13,8 @@ import sys
 import elftools.elf as elflib
 import elftools.elf.elffile
 
+0_0  # Python >= 3.6 is required
+
 def attr2func(f):
     class attr2func:
         def __getattr__(self, name):
