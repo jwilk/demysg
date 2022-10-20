@@ -81,8 +81,10 @@ def main():
             print('At:', fmt_addr(g.at))
         print('SP:', fmt_addr(g.sp))
         print('Path:', g.elf)
-        print('IP:', fmt_addr(g.ip))
-        print('VMA at:', fmt_addr(g.vmstart))
+        ip = int(g.ip, 16)
+        vmstart = int(g.vmstart, 16)
+        print('IP:', fmt_addr(ip), '=', f'VMA +', fmt_addr(ip - vmstart))
+        print('VMA at:', fmt_addr(vmstart))
         print('VMA size:', fmt_addr(g.vmsize))
         print()
 
