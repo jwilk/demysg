@@ -79,6 +79,7 @@ def main():
     ap.add_argument('-e', dest='elf', metavar='PATH', help='ELF file to look into')
     opts = ap.parse_args()
     prog = ap.prog
+    n = 0
     for line in sys.stdin:
         for regexp in regexps:
             match = regexp.search(line)
@@ -87,6 +88,8 @@ def main():
         else:
             print(f'{prog}: cannot parse:', line, file=sys.stderr)
         g = attr2func(match.group)
+        if n > 0:
+            print()
         print('Type:', g.type)
         print('Error:', fmt_err(g.err))
         try:
@@ -119,7 +122,7 @@ def main():
         addr = ip - vmstart + elf_vaddr
         print('Source:', end=' ', flush=True)
         subprocess.run(['addr2line', '-e', elf, '-f', '-i', '-p', '-C', str(addr)])
-        print()
+        n += 1
 
 if __name__ == '__main__':
     main()
