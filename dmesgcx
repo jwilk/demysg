@@ -123,9 +123,9 @@ def main():
                 raise RuntimeError(f'found {len(xsegments)} executable segments in {elf}')
             [xsegment] = xsegments
             elf_vaddr = xsegment['p_vaddr']
-        addr = ip - vmstart + elf_vaddr
-        print('Source:', end=' ', flush=True)
-        subprocess.run(['addr2line', '-e', elf, '-f', '-i', '-p', '-C', str(addr)])
+            addr = ip - vmstart + elf_vaddr
+            print('Source:', end=' ', flush=True)
+            subprocess.run(['addr2line', '-e', elf, '-f', '-i', '-p', '-C', str(addr)])
         n += 1
     sys.exit(n == 0)
 
