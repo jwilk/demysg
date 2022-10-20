@@ -1,0 +1,42 @@
+Overview
+========
+
+**dmesg** explains crash messages from Linux dmesg.
+
+Example
+-------
+
+.. code:: console
+
+   $ sudo dmesg -t | tail -n1
+   traps: gpm[9910] trap divide error ip:56653f44 sp:ffe4d950 error:0 in gpm[56647000+f000]
+
+   $ sudo dmesg -t | tail -n1 | dmesgcx -e /usr/sbin/gpm
+   Type: trap divide error
+   Error: 0x0000
+   SP: 0x0000FFE4D950
+   Path: /usr/sbin/gpm
+   IP: 0x000056653F44 = VMA + 0x00000000CF44
+   VMA at: 0x000056647000
+   VMA size: 0x00000000F000
+   Source: processMouse at ./src/daemon/processmouse.c:173
+
+Requirements
+============
+
+* Python ≥ 3.6
+
+* pyelftools_
+
+* addr2line_ from `GNU binutils`_
+
+.. _pyelftools:
+   https://pypi.org/project/pyelftools/
+
+.. _addr2line:
+   https://sourceware.org/binutils/docs/binutils/addr2line.html
+
+.. _GNU binutils:
+   https://www.gnu.org/software/binutils/
+
+.. vim:ft=rst ts=3 sts=3 sw=3 et
