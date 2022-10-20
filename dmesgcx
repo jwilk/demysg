@@ -80,6 +80,7 @@ def main():
         else:
             print('At:', fmt_addr(g.at))
         print('SP:', fmt_addr(g.sp))
+        print('Path:', g.elf)
         print('IP:', fmt_addr(g.ip))
         print('VMA at:', fmt_addr(g.vmstart))
         print('VMA size:', fmt_addr(g.vmsize))
