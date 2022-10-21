@@ -93,6 +93,9 @@ bland_types = {  # error code is always 0
     'alignment check',
 }
 
+def align_up(n, a):
+    return (n + a - 1) & ~(a - 1)
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('-e', dest='elf', metavar='PATH', help='ELF file to look into')
@@ -138,18 +141,20 @@ def main():
         print('Path:', elf)
         ip = Addr(g.ip)
         vmstart = Addr(g.vmstart)
+        vmsize = Addr(g.vmsize)
         print('IP:', ip, '=', 'VMA +', ip - vmstart)
         print('VMA at:', vmstart)
-        print('VMA size:', Addr(g.vmsize))
+        print('VMA size:', g.vmsize)
         if opts.elf:
             with open(opts.elf, 'rb') as fp:
                 elffile = elflib.elffile.ELFFile(fp)
                 xsegments = []
                 for segment in elffile.iter_segments('PT_LOAD'):
                     if segment['p_flags'] & elflib.constants.P_FLAGS.PF_X:
-                        xsegments += [segment]
+                        if align_up(segment['p_memsz'], segment['p_align']) == vmsize:
+                            xsegments += [segment]
             if len(xsegments) != 1:
-                raise RuntimeError(f'found {len(xsegments)} executable segments in {elf}')
+                raise RuntimeError(f'found {len(xsegments)} matching segments in {elf}')
             [xsegment] = xsegments
             elf_vaddr = xsegment['p_vaddr']
             addr = ip - vmstart + elf_vaddr
