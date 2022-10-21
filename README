@@ -13,7 +13,6 @@ Example
 
    $ sudo dmesg -t | tail -n1 | dmesgcx -e /usr/sbin/gpm
    Type: divide error
-   Error: 0x00000000
    SP: 0x0000FFE4D950
    Path: /usr/sbin/gpm
    IP: 0x000056653F44 = VMA + 0x00000000CF44

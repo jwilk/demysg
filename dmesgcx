@@ -102,8 +102,11 @@ def main():
         try:
             err = g.err
         except IndexError:
-            pass
-        else:
+            err = None
+        if g.type in {'divide error', 'overflow', 'invalid opcode', 'coprocessor segment overrun'}:
+            assert err == '0'
+            err = None
+        if err is not None:
             print('Error:', fmt_err(err))
         try:
             err = g.pf_err
