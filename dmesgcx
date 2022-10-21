@@ -31,7 +31,7 @@ def _gen_regexps():
     )
     yield (
         # show_signal_msg() in <arch/x86/mm/fault.c>:
-        fr'{pid}: (?P<type>segfault) at {x.at} ip {x.ip} sp {x.sp} error {x.pf_err} in {vma}'
+        fr'{pid}: (?P<type>segfault) at {x.at} ip {x.ip} sp {x.sp} error {x.err} in {vma}'
     )
 
 regexps = [re.compile(r) for r in _gen_regexps()]
@@ -113,21 +113,14 @@ def main():
         if n > 0:
             print()
         print('Type:', g.type)
-        try:
-            err = g.err
-        except IndexError:
-            err = None
+        err = g.err
         if g.type in bland_types:
             assert err == '0'
             err = None
-        if err is not None:
-            print('Error:', fmt_err(err))
-        try:
-            err = g.pf_err
-        except IndexError:
-            pass
-        else:
+        if g.type == 'segfault':
             print('Error:', fmt_pf_err(err))
+        elif err is not None:
+            print('Error:', fmt_err(err))
         try:
             at = g.at
         except IndexError:
