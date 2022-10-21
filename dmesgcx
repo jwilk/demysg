@@ -90,6 +90,7 @@ bland_types = {  # error code is always 0
     'bounds',
     'int3',
     'iret exception',
+    'alignment check',
 }
 
 def main():
