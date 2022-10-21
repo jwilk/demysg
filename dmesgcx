@@ -31,7 +31,7 @@ def _gen_regexps():
     )
     yield (
         # show_signal_msg() in <arch/x86/mm/fault.c>:
-        fr'{pid}: (?P<type>segfault) at {x.at} ip {x.ip} sp {x.sp} error {x.err} in {vma}'
+        fr'{pid}: (?P<type>segfault) at {x.at} ip {x.ip} sp {x.sp} error {x.pf_err} in {vma}'
     )
 
 regexps = [re.compile(r) for r in _gen_regexps()]
@@ -72,6 +72,11 @@ class PFErrorCode(enum.IntFlag):
 def fmt_err(err):
     if isinstance(err, str):
         err = int(err, 16)
+    return f'0x{err:08X}'
+
+def fmt_pf_err(err):
+    if isinstance(err, str):
+        err = int(err, 16)
     s = f'0x{err:04X}'
     if err != 0:
         s += f' ({PFErrorCode(err)})'
@@ -94,7 +99,18 @@ def main():
         if n > 0:
             print()
         print('Type:', g.type)
-        print('Error:', fmt_err(g.err))
+        try:
+            err = g.err
+        except IndexError:
+            pass
+        else:
+            print('Error:', fmt_err(err))
+        try:
+            err = g.pf_err
+        except IndexError:
+            pass
+        else:
+            print('Error:', fmt_pf_err(err))
         try:
             at = g.at
         except IndexError:
