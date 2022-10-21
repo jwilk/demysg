@@ -153,13 +153,17 @@ def main():
                     if segment['p_flags'] & elflib.constants.P_FLAGS.PF_X:
                         if align_up(segment['p_memsz'], segment['p_align']) == vmsize:
                             xsegments += [segment]
-            if len(xsegments) != 1:
-                raise RuntimeError(f'found {len(xsegments)} matching segments in {elf}')
-            [xsegment] = xsegments
-            elf_vaddr = xsegment['p_vaddr']
-            addr = ip - vmstart + elf_vaddr
-            print('Source:', end=' ', flush=True)
-            subprocess.run(['addr2line', '-e', elf, '-f', '-i', '-p', '-C', str(addr)])
+            n_xsegments = len(xsegments)
+            if n_xsegments == 1:
+                [xsegment] = xsegments
+                elf_vaddr = xsegment['p_vaddr']
+                addr = ip - vmstart + elf_vaddr
+                print('Source:', end=' ', flush=True)
+                subprocess.run(['addr2line', '-e', elf, '-f', '-i', '-p', '-C', str(addr)])
+            else:
+                if n_xsegments == 0:
+                    n_xsegments = 'no';
+                print(f'Source: ?? (found {n_xsegments} matching segments)')
         n += 1
     sys.exit(n == 0)
 
