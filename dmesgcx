@@ -82,6 +82,13 @@ def fmt_pf_err(err):
         s += f' ({PFErrorCode(err)})'
     return s
 
+bland_types = {  # error code is always 0
+    'divide error',
+    'overflow',
+    'invalid opcode',
+    'coprocessor segment overrun',
+}
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('-e', dest='elf', metavar='PATH', help='ELF file to look into')
@@ -103,7 +110,7 @@ def main():
             err = g.err
         except IndexError:
             err = None
-        if g.type in {'divide error', 'overflow', 'invalid opcode', 'coprocessor segment overrun'}:
+        if g.type in bland_types:
             assert err == '0'
             err = None
         if err is not None:
