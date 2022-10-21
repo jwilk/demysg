@@ -27,7 +27,7 @@ def _gen_regexps():
     vma = fr'(?P<elf>\S+)\[{x.vmstart}[+]{x.vmsize}\]'
     yield (
         # show_signal() in <arch/x86/kernel/traps.c>:
-        fr'{pid} (?P<type>.*) ip:{x.ip} sp:{x.sp} error:{x.err} in {vma}'
+        fr'{pid} trap (?P<type>.*) ip:{x.ip} sp:{x.sp} error:{x.err} in {vma}'
     )
     yield (
         # show_signal_msg() in <arch/x86/mm/fault.c>:
