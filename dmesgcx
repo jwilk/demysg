@@ -152,7 +152,7 @@ def main():
                 elf_vaddr = xsegment['p_vaddr']
                 addr = ip - vmstart + elf_vaddr
                 print('Source:', end=' ', flush=True)
-                subprocess.run(['addr2line', '-e', elf, '-f', '-i', '-p', '-C', str(addr)])
+                subprocess.run(['addr2line', '-e', elf, '-f', '-i', '-p', '-C', str(addr)], check=True)
             else:
                 if n_xsegments == 0:
                     n_xsegments = 'no'
