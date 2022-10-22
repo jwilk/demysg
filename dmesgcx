@@ -65,7 +65,7 @@ class PFErrorCode(enum.IntFlag):
 
     def __str__(self):
         s = super().__str__()
-        s = re.sub('^\w+[.]', '', s)
+        s = re.sub(r'^\w+[.]', '', s)
         s = re.sub('[|]', ' | ', s)
         return s
 
