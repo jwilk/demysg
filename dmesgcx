@@ -111,7 +111,8 @@ def main():
             if match is not None:
                 break
         else:
-            print(f'{prog}: cannot parse:', line, file=sys.stderr)
+            print(f'{prog}: cannot parse:', line.rstrip('\n'), file=sys.stderr)
+            continue
         g = attr2func(match.group)
         if n > 0:
             print()
