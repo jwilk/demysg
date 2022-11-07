@@ -140,7 +140,7 @@ def main():
         vmsize = Addr(g.vmsize)
         print('IP:', ip, '=', 'VMA +', ip - vmstart)
         print('VMA at:', vmstart)
-        print('VMA size:', g.vmsize)
+        print('VMA size:', vmsize)
         if opts.elf:
             with open(opts.elf, 'rb') as fp:
                 elffile = elflib.elffile.ELFFile(fp)
