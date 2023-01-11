@@ -12,7 +12,8 @@ int main(int argc, char **argv)
         "popf\n"
         : : : "cc"
     );
-    puts("Hello world!\n");
+    int a[2] = {1, 2};
+    return *((int*)(((char *)a + 1)));
 }
 
 /* vim:set ts=4 sts=4 sw=4 et:*/
