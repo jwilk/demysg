@@ -8,8 +8,9 @@ int main(int argc, char **argv)
 {
     __asm__(
         "pushf\n"
-        "orl $0x40000, (%esp)\n"
+        "orl $0x40000, (%%esp)\n"
         "popf\n"
+        : : : "cc"
     );
     puts("Hello world!\n");
 }
