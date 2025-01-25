@@ -66,7 +66,7 @@ class PFErrorCode(enum.IntFlag):
     def __str__(self):
         names = []
         n = int(self)
-        for i in type(self).__members__.values():
+        for i in type(self):
             if i & n:
                 n -= i
                 names += [i.name]
