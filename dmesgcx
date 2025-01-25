@@ -64,10 +64,15 @@ class PFErrorCode(enum.IntFlag):
     X86_PF_SGX   = 1 << 15  # SGX MMU page-fault
 
     def __str__(self):
-        s = super().__str__()
-        s = re.sub(r'^\w+[.]', '', s)
-        s = re.sub('[|]', ' | ', s)
-        return s
+        names = []
+        n = int(self)
+        for i in type(self).__members__.values():
+            if i & n:
+                n -= i
+                names += [i.name]
+        if n:
+            names += [str(n)]
+        return str.join(' | ', names)
 
 def fmt_err(err):
     if isinstance(err, str):
@@ -79,7 +84,9 @@ def fmt_pf_err(err):
         err = int(err, 16)
     s = f'0x{err:04X}'
     if err != 0:
-        s += f' ({PFErrorCode(err)})'
+        err = PFErrorCode(err)
+        s += f' ({err!s})'
+        # !s is needed to support Python < 3.8
     return s
 
 bland_types = {  # error code is always 0
