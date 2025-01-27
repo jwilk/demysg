@@ -64,6 +64,9 @@ class PFErrorCode(enum.IntFlag):
     X86_PF_SGX   = 1 << 15  # SGX MMU page-fault
     X86_PF_RMP   = 1 << 31  # RMP violation
 
+    # TODO: automatically verify the enum
+    # is in sync with the kernel
+
     def __str__(self):
         names = []
         n = int(self)
