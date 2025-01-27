@@ -2,6 +2,8 @@
  * SPDX-License-Identifier: MIT
  */
 
+//DMESG traps: trigger-BR[21058] trap bounds ip:565911a0 sp:ff95ecc4 error:0 in trigger-BR[56591000+1000]
+
 #include <stdint.h>
 
 int main(int argc, char **argv)

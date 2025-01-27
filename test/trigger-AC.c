@@ -2,6 +2,8 @@
  * SPDX-License-Identifier: MIT
  */
 
+//DMESG traps: trigger-AC[17217] trap alignment check ip:565921a0 sp:ff953ce8 error:0 in trigger-AC[56592000+1000]
+
 #include <stdio.h>
 
 int main(int argc, char **argv)
