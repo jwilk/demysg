@@ -62,6 +62,7 @@ class PFErrorCode(enum.IntFlag):
     X86_PF_INSTR = 1 << 4   # fault was an instruction fetch
     X86_PF_PK    = 1 << 5   # protection keys block access
     X86_PF_SGX   = 1 << 15  # SGX MMU page-fault
+    X86_PF_RMP   = 1 << 31  # RMP violation
 
     def __str__(self):
         names = []
