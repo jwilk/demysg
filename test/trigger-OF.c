@@ -8,7 +8,7 @@
 
 int main(int argc, char **argv)
 {
-    __asm__(
+    __asm__ volatile (
         "mov $-1, %%al\n"
         "mul %%al\n"
         "into\n"

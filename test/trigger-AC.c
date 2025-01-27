@@ -8,7 +8,7 @@
 
 int main(int argc, char **argv)
 {
-    __asm__(
+    __asm__ volatile (
         "pushf\n"
         "orl $0x40000, (%%esp)\n"
         "popf\n"

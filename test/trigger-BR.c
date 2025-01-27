@@ -11,7 +11,7 @@
 int main(int argc, char **argv)
 {
     uint32_t b[2] = {0, 0};
-    __asm__(
+    __asm__ volatile (
         "mov $42, %%ebx\n"
         "boundl %%ebx, (%0)\n"
         : : "r"(b) : "ebx"

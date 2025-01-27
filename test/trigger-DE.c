@@ -6,7 +6,7 @@
 
 int main(int argc, char **argv)
 {
-    __asm__(
+    __asm__ volatile (
         "xor %%eax, %%eax\n"
         "div %%eax\n"
         : : : "eax"
