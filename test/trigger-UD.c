@@ -8,7 +8,7 @@
 
 int main(int argc, char **argv)
 {
-    __asm__("ud2\n");
+    __asm__("ud2");
 }
 
 /* vim:set ts=4 sts=4 sw=4 et:*/
