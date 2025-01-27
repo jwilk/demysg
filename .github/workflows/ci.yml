@@ -42,12 +42,12 @@ jobs:
         make -C test
     - name: run pydiatra
       run: |
-        python -m pip install pydiatra
-        python -m pydiatra -v .
+        python3 -m pip install pydiatra
+        python3 -m pydiatra -v .
     - name: run pyflakes
       run: |
-        python -m pip install pyflakes
-        python -m pyflakes .
+        python3 -m pip install pyflakes
+        python3 -m pyflakes .
     - name: check README syntax
       run: |
         python3 -m pip install restructuredtext-lint pygments
