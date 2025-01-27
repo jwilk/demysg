@@ -90,14 +90,19 @@ def fmt_pf_err(err):
     return s
 
 bland_types = {  # error code is always 0
-    'divide error',
-    'overflow',
-    'invalid opcode',
-    'coprocessor segment overrun',
-    'bounds',
-    'int3',
+    'divide error', # DE
+    'overflow', # OF
+    'invalid opcode', # UD
+    'coprocessor segment overrun', # (not found in the wild)
+    'bounds', # BR
+    'int3', # BP
     'iret exception',
-    'alignment check',
+    'alignment check', # AC
+    # Sources:
+    # * <arch/x86/kernel/traps.c>
+    # * "Intel 64 and IA-32 Architectures Software Developer’s Manual
+    #    Volume 3A: System Programming Guide",
+    #    Table 6-1 "Protected-Mode Exceptions and Interrupts"
 }
 
 def align_down(n, a):
