@@ -14,6 +14,10 @@ all: $(x-files)
 %: %.c
 	$(CC) $(CFLAGS) $(filter-out //CFLAGS, $(shell grep ^//CFLAGS $(<))) $(LDFLAGS) $(<) -o $(@)
 
+.PHONY: test
+test: all
+	prove -v *.t
+
 .PHONY: clean
 clean:
 	rm -f $(x-files)
