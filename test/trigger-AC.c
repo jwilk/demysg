@@ -10,7 +10,11 @@ int main(int argc, char **argv)
 {
     __asm__ volatile (
         "pushf\n"
+#ifdef __x86_64__
+        "orl $0x40000, (%%rsp)\n"
+#else
         "orl $0x40000, (%%esp)\n"
+#endif
         "popf\n"
         : : : "cc"
     );
