@@ -33,9 +33,37 @@ jobs:
     - name: install gcc-multilib  # needed for -m32 support
       run: |
         sudo apt-get install gcc-multilib
+    - name: install pyelftools
+      run: |
+        # TODO: test against old versions
+        python3 -m pip install pyelftools
     - name: build tests
       run:
         make -C test
+    - name: disable printk rate limiting
+      run:
+        sudo sysctl kernel.printk_ratelimit=0
+    - name: patch out use of dmesg --since
+      if: matrix.os == 'ubuntu-20.04'
+      run:
+        sed -i -e '/--since=/d' test/crash.t
+    - name: clear dmesg
+      run:
+        # not strictly necessary,
+        # but it makes debugging easier
+        sudo dmesg --clear
+    - name: install colorized-logs
+      run: |
+        sudo apt-get install colorized-logs
+    - name: run tests
+      run:
+        # use pipetty(1) to ensure timely output from "prove -v"
+        pipetty make -C test test
+      timeout-minutes: 1
+    - name: dump dmesg
+      run:
+        sudo dmesg --time-format=iso
+      if: success() || failure()
     - name: run pydiatra
       run: |
         python3 -m pip install pydiatra
