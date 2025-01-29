@@ -30,9 +30,13 @@ jobs:
       run: |
         printf 'Apt::Install-Recommends "false";\n' | sudo tee -a /etc/apt/apt.conf
         sudo apt-get update
-    - name: install gcc-multilib  # needed for -m32 support
+    - name: APT install test deps
       run: |
-        sudo apt-get install gcc-multilib
+        pkgs=(
+          gcc-multilib  # for -m32 support
+          colorized-logs  # for pipetty(1)
+        )
+        sudo apt-get install "${pkgs[@]}"
     - name: install pyelftools
       run: |
         # TODO: test against old versions
@@ -52,9 +56,6 @@ jobs:
         # not strictly necessary,
         # but it makes debugging easier
         sudo dmesg --clear
-    - name: install colorized-logs
-      run: |
-        sudo apt-get install colorized-logs
     - name: run tests
       run:
         # use pipetty(1) to ensure timely output from "prove -v"
