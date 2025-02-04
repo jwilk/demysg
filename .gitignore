@@ -1,2 +1,2 @@
-test/trigger-*
-!test/trigger-*.c
+/test/trigger-*
+!/test/trigger-*.c
