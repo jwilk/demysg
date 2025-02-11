@@ -116,6 +116,18 @@ def align_down(n, a):
 def align_up(n, a):
     return (n + a - 1) & ~(a - 1)
 
+def get_segments(elf_path, *, size):
+    with open(elf_path, 'rb') as fp:
+        elffile = elflib.elffile.ELFFile(fp)
+        for segment in elffile.iter_segments('PT_LOAD'):
+            if segment['p_flags'] & elflib.constants.P_FLAGS.PF_X:
+                page_size = segment['p_align']  # XXX this isn't quite right
+                offset = segment['p_offset']
+                map_start = align_down(offset, page_size)
+                map_end = align_up(offset + segment['p_memsz'], page_size)
+                if map_end - map_start == size:
+                    yield segment
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('-e', dest='elf', metavar='PATH', help='ELF file to look into')
@@ -165,17 +177,8 @@ def main():
         print('VMA at:', vmstart)
         print('VMA size:', vmsize)
         if opts.elf:
-            with open(opts.elf, 'rb') as fp:
-                elffile = elflib.elffile.ELFFile(fp)
-                xsegments = []
-                for segment in elffile.iter_segments('PT_LOAD'):
-                    if segment['p_flags'] & elflib.constants.P_FLAGS.PF_X:
-                        page_size = segment['p_align']  # XXX this isn't quite right
-                        offset = segment['p_offset']
-                        map_start = align_down(offset, page_size)
-                        map_end = align_up(offset + segment['p_memsz'], page_size)
-                        if map_end - map_start == vmsize:
-                            xsegments += [segment]
+            xsegments = get_segments(opts.elf, size=vmsize)
+            xsegments = list(xsegments)
             n_xsegments = len(xsegments)
             if n_xsegments == 1:
                 [xsegment] = xsegments
