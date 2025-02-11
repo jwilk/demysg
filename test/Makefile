@@ -12,7 +12,7 @@ x-files = $(c-files:.c=)
 all: $(x-files)
 
 %: %.c
-	$(CC) $(CFLAGS) $(filter-out //CFLAGS, $(shell grep ^//CFLAGS $(<))) $(<) -o $(@)
+	$(CC) $(CFLAGS) $(filter-out //CFLAGS, $(shell grep ^//CFLAGS $(<))) $(LDFLAGS) $(<) -o $(@)
 
 .PHONY: clean
 clean:
