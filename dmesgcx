@@ -24,6 +24,7 @@ def attr2func(f):
 def _gen_regexps():
     x = attr2func(lambda name: fr'(?P<{name}>[0-9a-f]+)')
     pid = r'\[\d+\]'
+    # print_vma_addr() in <mm/memory.c>
     vma = fr'(?P<elf>\S+)\[{x.vmstart}[+]{x.vmsize}\]'
     yield (
         # show_signal() in <arch/x86/kernel/traps.c>:
