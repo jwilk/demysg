@@ -154,9 +154,14 @@ def main():
             elf = opts.elf
         print('Path:', elf)
         ip = Addr(g.ip)
+        relip = None
+        relip_info = []
+        if g.relip:
+            relip = Addr(g.relip)
+            relip_info = ['= ELF +', relip]
         vmstart = Addr(g.vmstart)
         vmsize = Addr(g.vmsize)
-        print('IP:', ip, '=', 'VMA +', ip - vmstart)
+        print('IP:', ip, '=', 'VMA +', ip - vmstart, *relip_info)
         print('VMA at:', vmstart)
         print('VMA size:', vmsize)
         if opts.elf:
