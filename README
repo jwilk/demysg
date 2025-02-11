@@ -1,7 +1,7 @@
 Overview
 ========
 
-**dmesg** explains crash messages from Linux dmesg.
+**dmesgcx** explains crash messages from Linux dmesg.
 
 Example
 -------
