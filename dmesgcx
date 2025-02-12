@@ -197,7 +197,8 @@ def main():
                 else:
                     addr = ip - vmstart + align_down(elf_vaddr, page_size)
                 print('Source:', end=' ', flush=True)
-                subprocess.run(['addr2line', '-e', elf, '-f', '-i', '-p', '-C', str(addr)], check=True)
+                cmdline = ['addr2line', '-e', elf, '-f', '-i', '-p', '-C', str(addr)]
+                subprocess.run(cmdline, check=True)
             else:
                 if n_xsegments == 0:
                     n_xsegments = 'no'
