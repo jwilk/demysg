@@ -195,7 +195,7 @@ def main():
                     elf_faddr = xsegment['p_offset']
                     addr = relip - elf_faddr + elf_vaddr
                 else:
-                    addr = ip - vmstart + elf_vaddr
+                    addr = ip - vmstart + align_down(elf_vaddr, page_size)
                 print('Source:', end=' ', flush=True)
                 subprocess.run(['addr2line', '-e', elf, '-f', '-i', '-p', '-C', str(addr)], check=True)
             else:
