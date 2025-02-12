@@ -6,6 +6,7 @@
 
 import argparse
 import enum
+import os
 import re
 import subprocess
 import sys
@@ -116,6 +117,10 @@ def align_down(n, a):
 def align_up(n, a):
     return (n + a - 1) & ~(a - 1)
 
+page_size = os.sysconf('SC_PAGE_SIZE')
+# FIXME? This assumes that page size for the crashed program
+# is the same as ours.
+
 def get_segments(elf_path, *, size, offset=None):
     with open(elf_path, 'rb') as fp:
         elffile = elflib.elffile.ELFFile(fp)
@@ -125,7 +130,6 @@ def get_segments(elf_path, *, size, offset=None):
                     yield segment
                     return
             elif segment['p_flags'] & elflib.constants.P_FLAGS.PF_X:
-                page_size = segment['p_align']  # XXX this isn't quite right
                 offset = segment['p_offset']
                 map_start = align_down(offset, page_size)
                 map_end = align_up(offset + segment['p_memsz'], page_size)
