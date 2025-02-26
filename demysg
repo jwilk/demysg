@@ -14,7 +14,7 @@ import sys
 import elftools.elf.elffile
 elflib = elftools.elf
 
-0_0  # Python >= 3.6 is required
+lambda x, /: x  # Python >= 3.8 is required
 
 def attr2func(f):
     class attr2func:
