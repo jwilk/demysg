@@ -143,8 +143,7 @@ def main():
     n = 0
     for line in sys.stdin:
         for regexp in regexps:
-            match = regexp.search(line)
-            if match is not None:
+            if match := regexp.search(line):
                 break
         else:
             print(f'{prog}: cannot parse:', line.rstrip('\n'), file=sys.stderr)
