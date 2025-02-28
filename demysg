@@ -145,7 +145,10 @@ def get_segments(elf_path, *, size, offset=None):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('-e', dest='elf', metavar='PATH', help='ELF file to look into')
+    ap.add_argument('-d', dest='disasm', action='store_true', help='disassemble instructions')
     opts = ap.parse_args()
+    if opts.disasm and not opts.elf:
+        ap.error('-d requires -e')
     prog = ap.prog
     n = 0
     for line in sys.stdin:
@@ -213,6 +216,38 @@ def main():
             for line in proc.stdout.splitlines():
                 print(' ', line)
             if proc.returncode != 0:
+                fatal(f'{cmdline[0]} failed')
+        if opts.disasm:
+            cmdline = ['objdump', '--dwarf=follow-links', '-d', elf]
+            print('Disassembly:')
+            print(' ', '#', shlex.join(cmdline))
+            buffer = []
+            with subprocess.Popen(cmdline, text=True, stdout=subprocess.PIPE) as proc:
+                for line in proc.stdout:
+                    line = line.rstrip()
+                    if match := re.match('([0-9a-f]+) <', line):
+                        daddr = int(match.group(1), 16)
+                        if daddr > addr:
+                            break
+                        buffer = [line]
+                        continue
+                    if match := re.match(' *([0-9a-f]+):', line):
+                        daddr = int(match.group(1), 16)
+                        if daddr == addr:
+                            if len(buffer) >= 2:
+                                buffer[1:] = ['...']
+                            buffer += [line]
+                            break
+                    buffer += [line]
+                for line in proc.stdout:
+                    pass
+            print(' ', '...')
+            if buffer and buffer[-1] == '':
+                buffer.pop()
+            for line in buffer:
+                print(' ', line)
+            print(' ', '...')
+            if proc.wait() != 0:
                 fatal(f'{cmdline[0]} failed')
     sys.exit(n == 0)
 
