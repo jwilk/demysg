@@ -8,6 +8,7 @@ import argparse
 import enum
 import os
 import re
+import shlex
 import subprocess
 import sys
 
@@ -194,9 +195,12 @@ def main():
                     addr = relip - elf_faddr + elf_vaddr
                 else:
                     addr = ip - vmstart + align_down(elf_vaddr, page_size)
-                print('Source:', end=' ', flush=True)
+                print('Source:')
                 cmdline = ['addr2line', '-e', elf, '-f', '-i', '-p', '-C', str(addr)]
-                subprocess.run(cmdline, check=True)
+                print(' ', '#', shlex.join(cmdline))
+                proc = subprocess.run(cmdline, text=True, stdout=subprocess.PIPE, check=True)
+                for line in proc.stdout.splitlines():
+                    print(' ', line)
             else:
                 if n_xsegments == 0:
                     n_xsegments = 'no'

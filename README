@@ -18,7 +18,9 @@ Example
    IP: 0x000056653F44 = VMA + 0x00000000CF44
    VMA at: 0x000056647000
    VMA size: 0x00000000F000
-   Source: processMouse at ./src/daemon/processmouse.c:173
+   Source:
+     # addr2line -e /usr/sbin/gpm -f -i -p -C 0x00000000EF44
+     processMouse at ./src/daemon/processmouse.c:173
 
 Requirements
 ============
