@@ -17,6 +17,12 @@ elflib = elftools.elf
 
 lambda x, /: x  # Python >= 3.8 is required
 
+prog = argparse.ArgumentParser().prog
+
+def fatal(msg):
+    print(f'{prog}: error: {msg}', file=sys.stderr)
+    sys.exit(1)
+
 def attr2func(f):
     class attr2func:
         def __getattr__(self, name):
@@ -203,9 +209,11 @@ def main():
             print('Source:')
             cmdline = ['addr2line', '-e', elf, '-f', '-i', '-p', '-C', str(addr)]
             print(' ', '#', shlex.join(cmdline))
-            proc = subprocess.run(cmdline, text=True, stdout=subprocess.PIPE, check=True)
+            proc = subprocess.run(cmdline, text=True, stdout=subprocess.PIPE)
             for line in proc.stdout.splitlines():
                 print(' ', line)
+            if proc.returncode != 0:
+                fatal(f'{cmdline[0]} failed')
     sys.exit(n == 0)
 
 if __name__ == '__main__':
