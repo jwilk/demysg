@@ -31,11 +31,16 @@ Requirements
 
 * addr2line_ from `GNU binutils`_
 
+* objdump_ from `GNU binutils`_
+
 .. _pyelftools:
    https://pypi.org/project/pyelftools/
 
 .. _addr2line:
    https://sourceware.org/binutils/docs/binutils/addr2line.html
+
+.. _objdump:
+   https://sourceware.org/binutils/docs/binutils/objdump.html
 
 .. _GNU binutils:
    https://www.gnu.org/software/binutils/
