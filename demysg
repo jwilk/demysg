@@ -145,12 +145,13 @@ def main():
     for line in sys.stdin:
         for regexp in regexps:
             if match := regexp.search(line):
+                n += 1
                 break
         else:
             print(f'{prog}: cannot parse:', line.rstrip('\n'), file=sys.stderr)
             continue
         g = attr2func(match.group)
-        if n > 0:
+        if n > 1:
             print()
         print('Type:', g.type)
         err = g.err
@@ -187,25 +188,24 @@ def main():
             xsegments = get_segments(opts.elf, size=vmsize, offset=relip)
             xsegments = list(xsegments)
             n_xsegments = len(xsegments)
-            if n_xsegments == 1:
-                [xsegment] = xsegments
-                elf_vaddr = xsegment['p_vaddr']
-                if relip is not None:
-                    elf_faddr = xsegment['p_offset']
-                    addr = relip - elf_faddr + elf_vaddr
-                else:
-                    addr = ip - vmstart + align_down(elf_vaddr, page_size)
-                print('Source:')
-                cmdline = ['addr2line', '-e', elf, '-f', '-i', '-p', '-C', str(addr)]
-                print(' ', '#', shlex.join(cmdline))
-                proc = subprocess.run(cmdline, text=True, stdout=subprocess.PIPE, check=True)
-                for line in proc.stdout.splitlines():
-                    print(' ', line)
-            else:
+            if n_xsegments != 1:
                 if n_xsegments == 0:
                     n_xsegments = 'no'
                 print(f'Source: ?? (found {n_xsegments} matching segments)')
-        n += 1
+                continue
+            [xsegment] = xsegments
+            elf_vaddr = xsegment['p_vaddr']
+            if relip is not None:
+                elf_faddr = xsegment['p_offset']
+                addr = relip - elf_faddr + elf_vaddr
+            else:
+                addr = ip - vmstart + align_down(elf_vaddr, page_size)
+            print('Source:')
+            cmdline = ['addr2line', '-e', elf, '-f', '-i', '-p', '-C', str(addr)]
+            print(' ', '#', shlex.join(cmdline))
+            proc = subprocess.run(cmdline, text=True, stdout=subprocess.PIPE, check=True)
+            for line in proc.stdout.splitlines():
+                print(' ', line)
     sys.exit(n == 0)
 
 if __name__ == '__main__':
