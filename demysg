@@ -210,6 +210,7 @@ def main():
             else:
                 addr = ip - vmstart + align_down(elf_vaddr, page_size)
             print('Source:')
+            # TODO: check early if addr2line(1) exists
             cmdline = ['addr2line', '-e', elf, '-f', '-i', '-p', '-C', str(addr)]
             print(' ', '#', shlex.join(cmdline))
             proc = subprocess.run(cmdline, text=True, stdout=subprocess.PIPE)
@@ -218,6 +219,7 @@ def main():
             if proc.returncode != 0:
                 fatal(f'{cmdline[0]} failed')
         if opts.disasm:
+            # TODO: check early if objdump(1) exists
             cmdline = ['objdump', '--dwarf=follow-links', '-d', elf]
             print('Disassembly:')
             print(' ', '#', shlex.join(cmdline))
